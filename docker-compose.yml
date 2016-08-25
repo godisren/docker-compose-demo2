@@ -1,0 +1,30 @@
+version: '2'
+services:
+  nginx:
+    build: nginx
+    volumes:
+        - ./nginx/files/nginx.conf:/etc/nginx/nginx.conf
+    links:
+        - web1:web1
+        - web2:web2
+    ports:
+        - "8880:80"
+  db:
+    build: mariadb
+  web1:
+    build: tomcat
+    environment:
+     - "JAVA_OPTS=-Dap.mode=production_1"
+    ports:
+     - "8888:8080"
+    links:
+     - db
+  web2:
+    build: tomcat
+    environment:
+     - "JAVA_OPTS=-Dap.mode=production_2"
+    ports:
+     - "8889:8080"
+    links:
+     - db
+  
